@@ -26,9 +26,10 @@
             });
             
             function showPictures(element){
-                var image = '<img src="' + element.images.low_resolution.url + '" alt="' + element.caption.text + '">';
+                console.log(element);
+                var image = '<img src="' + element.images.low_resolution.url + '" alt="' + (element.caption ? element.caption.text : '') + '">';
                 $('#content')
-                    .append('<a href="'+element.link+'" target="_blank" title="'+element.caption.text+'">'+image+'</a>');
+                    .append('<a href="'+element.link+'" target="_blank" title="'+(element.caption ? element.caption.text : '')+'">'+image+'</a>');
             }
             
             function getPictures(url){
