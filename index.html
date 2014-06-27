@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">        
+        <title>Stats Loto</title>
+        <link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css">
+        <style>
+            img{margin:5px 5px 5px 5px}
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="col-md-offset-3">
+                <img src="ourpraguetrip.png" alt="logo">
+            </div>
+        </div>
+        <div id="content">
+            
+        </div>
+        <div class="content">
+            <div class="col-md-offset-3">
+                <button class="btn btn-large">Charger la suite</button>
+            </div>
+        </div>        
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script>
+            var next_uri = '';
+            $(document).ready(function(){
+                //var url = 'https://api.instagram.com/v1/users/1331277012/media/recent/?client_id=6916ab4ac2b24795aabbdc5af9db26a0';
+                getPictures('https://api.instagram.com/v1/users/313684249/media/recent/?client_id=6916ab4ac2b24795aabbdc5af9db26a0');
+                
+            });
+            
+            function showPictures(element){
+                var image = '<img src="' + element.images.low_resolution.url + '" alt="' + element.caption.text + '">';
+                $('#content')
+                    .append('<a href="'+element.link+'" target="_blank" title="'+element.caption.text+'">'+image+'</a>');
+            }
+            
+            function getPictures(url){
+                $.ajax({
+                    url: url,
+                    dataType : 'jsonp'                    
+                }).done(function(response){
+                    if(response.data){
+                        for(var i = 0; i < response.data.length; i++){
+                            showPictures(response.data[i]);
+                        }
+                        if(response.pagination.next_url)
+                            next_uri = response.pagination.next_url;
+                        else
+                            next_uri = null;
+                    }
+                });
+            }
+            
+            $(window).scroll(function(){
+                if(($(this).height() + $(this).scrollTop()) == $(document).height() && next_uri !== null){
+                    getPictures(next_uri);
+                }
+            });
+        </script>
+    </body>
+</html>
